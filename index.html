@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ням-Ням | Домашние полуфабрикаты</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #E65C00;
+            --primary-hover: #CC5200;
+            --bg-dark: #1A1A1A;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #FFFFFF;
+            --text-muted: #B0B0B0;
+            --radius: 16px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-logo {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw; max-width: 800px;
+            opacity: 0.03; pointer-events: none;
+            z-index: 0; filter: blur(2px);
+        }
+
+        .container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 24px; position: relative; z-index: 1;
+        }
+
+        header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(26, 26, 26, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0;
+        }
+
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem; /* Уменьшено с 2rem на 40% */
+            font-weight: 700;
+            color: var(--primary); letter-spacing: -0.5px;
+        }
+
+        nav ul { display: flex; gap: 20px; list-style: none; }
+        nav a { 
+            color: var(--text-muted); font-weight: 600; font-size: 0.9rem;
+            transition: var(--transition); text-decoration: none;
+        }
+        nav a:hover { color: var(--primary); }
+
+        .hero { padding: 60px 0 40px; text-align: center; }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 2.5vw, 2.1rem); /* Уменьшено на 40% */
+            line-height: 1.15; margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, #ccc);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1rem; color: var(--text-muted);
+            max-width: 600px; margin: 0 auto 25px;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        .btn-main {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--primary); color: white;
+            padding: 14px 28px; border-radius: 50px;
+            font-weight: 700; font-size: 0.95rem;
+            text-decoration: none;
+            transition: var(--transition);
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .btn-main:hover {
+            background: var(--primary-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(230, 92, 0, 0.3);
+        }
+
+        .catalog { padding: 40px 0 80px; }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; margin-bottom: 8px; color: var(--primary);
+        }
+
+        .section-subtitle { color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
+
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px; margin-bottom: 50px;
+        }
+
+        .product-card {
+            background: var(--card-bg); color: #1a1a1a;
+            border-radius: var(--radius); padding: 22px;
+            display: flex; flex-direction: column;
+            transition: var(--transition);
+            opacity: 0; transform: translateY(30px);
+            animation: fadeInCard 0.6s ease-out forwards;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.15s; }
+        .product-card:nth-child(3) { animation-delay: 0.2s; }
+        .product-card:nth-child(4) { animation-delay: 0.25s; }
+        .product-card:nth-child(5) { animation-delay: 0.3s; }
+        .product-card:nth-child(6) { animation-delay: 0.35s; }
+
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+        .card-cat {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px;
+            color: #888; font-weight: 800; margin-bottom: 8px;
+        }
+
+        .card-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; line-height: 1.3; }
+
+        .card-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 12px; border-top: 1px dashed #ddd;
+        }
+
+        .price-wrap { display: flex; flex-direction: column; }
+        .price { font-size: 1.3rem; font-weight: 800; color: var(--primary); }
+        .unit { font-size: 0.8rem; color: #666; font-weight: 600; }
+
+        .custom-block {
+            grid-column: 1 / -1;
+            background: rgba(230, 92, 0, 0.1);
+            border: 1px solid rgba(230, 92, 0, 0.2);
+            padding: 25px; border-radius: var(--radius); margin-top: 10px;
+        }
+
+        .custom-title {
+            color: var(--primary); font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .custom-title::before {
+            content: ''; display: block; width: 8px; height: 8px;
+            background: var(--primary); border-radius: 50%;
+        }
+
+        .custom-list {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .custom-item {
+            display: flex; justify-content: space-between;
+            font-weight: 600; color: #1a1a1a;
+            padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        footer {
+            background: #111; padding: 60px 0 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px; margin-bottom: 50px;
+        }
+
+        .footer-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem; color: var(--primary); margin-bottom: 18px;
+        }
+
+        .footer-link {
+            display: block; color: var(--text-muted);
+            margin-bottom: 10px; transition: var(--transition);
+            text-decoration: none; font-size: 0.9rem;
+        }
+        .footer-link:hover { color: white; transform: translateX(5px); }
+        .footer-link strong { color: white; }
+
+        .footer-bottom {
+            text-align: center; color: #555;
+            padding-top: 25px; border-top: 1px solid #222; font-size: 0.85rem;
+        }
+
+        .floating-wa {
+            position: fixed; bottom: 25px; right: 25px;
+            background: #25D366; width: 56px; height: 56px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            z-index: 99; transition: var(--transition);
+            text-decoration: none;
+        }
+        .floating-wa:hover { transform: scale(1.1); }
+        .floating-wa svg { width: 28px; height: 28px; fill: white; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInCard {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .header-inner { flex-direction: column; gap: 15px; }
+            nav ul { gap: 12px; flex-wrap: wrap; justify-content: center; }
+            .hero h1 { font-size: 1.3rem; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <svg class="bg-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="45" fill="#FFD700"/>
+        <circle cx="35" cy="40" r="4" fill="#E65C00"/>
+        <circle cx="65" cy="40" r="4" fill="#E65C00"/>
+        <path d="M 30 60 Q 50 80 70 60" stroke="#E65C00" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M 25 55 L 20 70 M 75 55 L 80 70" stroke="#E65C00" stroke-width="3" fill="none"/>
+    </svg>
+
+    <header>
+        <div class="container header-inner">
+            <div class="logo">Ням-Ням</div>
+            <nav>
+                <ul>
+                    <li><a href="#flour">Мучное</a></li>
+                    <li><a href="#meat">Мясное</a></li>
+                    <li><a href="#fish">Рыбное</a></li>
+                    <li><a href="#veg">Овощное</a></li>
+                    <li><a href="#breakfast">Завтраки</a></li>
+                </ul>
+            </nav>
+            <a href="tel:+79300880806" style="color:white; font-weight:700; text-decoration:none; font-size: 0.9rem;">+7 930 088-08-06</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Вкус настоящей домашней кухни</h1>
+            <p>Ручная лепка, натуральные ингредиенты и бережная заморозка. Полный ассортимент домашних полуфабрикатов с доставкой по Магасу.</p>
+            <a href="https://wa.me/79300880806?text=Здравствуйте!%20Хочу%20сделать%20заказ." class="btn-main" target="_blank">
+                Оформить заказ в WhatsApp
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.005.572 2.07.88 3.175.88 3.18 0 5.767-2.587 5.767-5.766.001-3.182-2.585-5.769-5.766-5.769zm9.969 5.766c0 5.504-4.461 9.965-9.969 9.965-1.744 0-3.376-.463-4.803-1.27l-5.228 1.37 1.396-5.093c-.916-1.474-1.465-3.21-1.465-5.072 0-5.504 4.46-9.965 9.969-9.965 5.508 0 9.969 4.461 9.969 9.965z"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <main class="catalog container">
+        
+        <div id="flour">
+            <h2 class="section-title">Мучное</h2>
+            <p class="section-subtitle">Классика домашней кухни ручной лепки</p>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="card-cat">Пельмени</div>
+                    <div class="card-name">Пельмени говяжьи</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">680₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Пельмени</div>
+                    <div class="card-name">Пельмени куриные</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">550₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Манты</div>
+                    <div class="card-name">Манты с фаршем</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">720₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Вареники</div>
+                    <div class="card-name">Вареники с творогом</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">500₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Вареники</div>
+                    <div class="card-name">Вареники с картошкой</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">360₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Вареники</div>
+                    <div class="card-name">Вареники с картошкой и луком</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">380₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Вареники</div>
+                    <div class="card-name">Вареники с картошкой и грибами</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">400₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Хинкали</div>
+                    <div class="card-name">Открытые хинкали</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">750₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Выпечка</div>
+                    <div class="card-name">Чебуреки</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">500₽</span><span class="unit">за 5 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Галушки</div>
+                    <div class="card-name">Ушки-галушки</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">240₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Галушки</div>
+                    <div class="card-name">Галушки кукурузные</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">250₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+
+                <div class="custom-block">
+                    <div class="custom-title">Изготовление под заказ</div>
+                    <div class="custom-list">
+                        <div class="custom-item"><span>Манты с рубленным мясом</span><strong>870₽ / 1 кг</strong></div>
+                        <div class="custom-item"><span>Тонкий хинкал</span><strong>240₽ / 1 кг</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="meat">
+            <h2 class="section-title">Мясное</h2>
+            <p class="section-subtitle">Сочное, сытное и приготовленное с душой</p>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="card-cat">Котлеты</div>
+                    <div class="card-name">Котлеты говяжьи</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">640₽</span><span class="unit">за 6 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Котлеты</div>
+                    <div class="card-name">Котлеты куриные</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">540₽</span><span class="unit">за 6 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Котлеты</div>
+                    <div class="card-name">Котлеты по-киевски</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">650₽</span><span class="unit">за 5 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Котлеты</div>
+                    <div class="card-name">Котлеты по-киевски с грибами</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">700₽</span><span class="unit">за 5 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Люля</div>
+                    <div class="card-name">Люля куриные</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">540₽</span><span class="unit">за 5 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Люля</div>
+                    <div class="card-name">Люля говяжьи</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">640₽</span><span class="unit">за 5 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Фрикадельки</div>
+                    <div class="card-name">Фрикадельки куриные</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">550₽</span><span class="unit">за 500 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Фрикадельки</div>
+                    <div class="card-name">Фрикадельки говяжьи</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">600₽</span><span class="unit">за 500 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Тефтели</div>
+                    <div class="card-name">Тефтели домашние</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">600₽</span><span class="unit">за 10 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Голубцы</div>
+                    <div class="card-name">Голубцы</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">780₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Перцы</div>
+                    <div class="card-name">Перцы целые</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">780₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Перцы</div>
+                    <div class="card-name">Перцы половинки</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">780₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Стрипсы</div>
+                    <div class="card-name">Стрипсы куриные</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">560₽</span><span class="unit">за 500 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Курица</div>
+                    <div class="card-name">Курица очищенная половинка</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">430₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Курица</div>
+                    <div class="card-name">Курица маринованная половинка</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">450₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Отбивные</div>
+                    <div class="card-name">Отбивные натуральные</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">1300₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Нарезка</div>
+                    <div class="card-name">Говяжьи нарезки</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">600₽</span><span class="unit">за 500 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Фарш</div>
+                    <div class="card-name">Говяжий фарш</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">600₽</span><span class="unit">за 500 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Фарш</div>
+                    <div class="card-name">Куриный фарш</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">550₽</span><span class="unit">за 500 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Филе</div>
+                    <div class="card-name">Филе куриной грудки</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">600₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Филе</div>
+                    <div class="card-name">Куриное филе в панировке</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">550₽</span><span class="unit">за 500 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Премиум</div>
+                    <div class="card-name">Стейк Рибай</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">1500₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+
+                <div class="custom-block">
+                    <div class="custom-title">Маринады под заказ</div>
+                    <div class="custom-list">
+                        <div class="custom-item"><span>Буженина маринованная</span><strong>1300₽ / 1 кг</strong></div>
+                        <div class="custom-item"><span>Куриные крылышки марин.</span><strong>600₽ / 1 кг</strong></div>
+                        <div class="custom-item"><span>Куриные ножки марин.</span><strong>600₽ / 1 кг</strong></div>
+                        <div class="custom-item"><span>Перепелки маринованные</span><strong>600₽ / 2 шт</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fish">
+            <h2 class="section-title">Рыбное</h2>
+            <p class="section-subtitle">Свежайшая рыба для вашего стола</p>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="card-cat">Лосось</div>
+                    <div class="card-name">Стейк лосося</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">3000₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Форель</div>
+                    <div class="card-name">Форель слабосоленая</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">2700₽</span><span class="unit">за 1 кг</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Дорадо</div>
+                    <div class="card-name">Дорадо целая</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">1000₽</span><span class="unit">за 2 шт</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="veg">
+            <h2 class="section-title">Овощное</h2>
+            <p class="section-subtitle">Готовые зажарки для экономии времени</p>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="card-cat">Зажарка</div>
+                    <div class="card-name">Зажарка классическая</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">220₽</span><span class="unit">за 300 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Зажарка</div>
+                    <div class="card-name">Зажарка томатная</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">260₽</span><span class="unit">за 300 гр</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Зажарка</div>
+                    <div class="card-name">Зажарка для борща</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">290₽</span><span class="unit">за 300 гр</span></div>
+                    </div>
+                </div>
+
+                <div class="custom-block">
+                    <div class="custom-title">Под заказ</div>
+                    <div class="custom-list">
+                        <div class="custom-item"><span>Зажарка класс. на топленом масле</span><strong>350₽ / 300 гр</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="breakfast">
+            <h2 class="section-title">Завтраки</h2>
+            <p class="section-subtitle">Идеальное начало дня для всей семьи</p>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="card-cat">Сырники</div>
+                    <div class="card-name">Сырники классические</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">470₽</span><span class="unit">за 8 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Сырники</div>
+                    <div class="card-name">Сырники с маком</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">490₽</span><span class="unit">за 8 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Сырники</div>
+                    <div class="card-name">Сырники с малиной</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">490₽</span><span class="unit">за 8 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Сырники</div>
+                    <div class="card-name">Сырники с кокосом</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">490₽</span><span class="unit">за 8 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Сырники</div>
+                    <div class="card-name">Сырники ассорти</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">490₽</span><span class="unit">за 8 шт</span></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="card-cat">Национальное</div>
+                    <div class="card-name">Сискал с творогом</div>
+                    <div class="card-footer">
+                        <div class="price-wrap"><span class="price">380₽</span><span class="unit">за 6 шт</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Ням-Ням</h3>
+                    <p style="color:#aaa; margin-bottom:20px; font-size: 0.9rem;">Домашние полуфабрикаты ручной работы. Мы готовим с любовью, чтобы вы экономили время.</p>
+                    <p style="color:#aaa; font-size: 0.9rem;">📍 г. Магас, ул. Зязикова, 52</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Связаться с нами</h3>
+                    <a href="tel:+79300880806" class="footer-link"><strong>Основной:</strong> +7 930 088-08-06</a>
+                    <a href="tel:+79037170606" class="footer-link"><strong>Горячий цех:</strong> +7 903-717-06-06</a>
+                    <a href="https://wa.me/79300880806?text=Здравствуйте!%20Хочу%20сделать%20заказ." class="footer-link" target="_blank"><strong>WhatsApp:</strong> Написать сообщение</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Доставка</h3>
+                    <p class="footer-link">Работаем с лучшими сервисами:</p>
+                    <a href="#" class="footer-link">@cham.app</a>
+                    <a href="#" class="footer-link">@vayeda.dostavka</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                © 2024 Ням-Ням. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/79300880806?text=Здравствуйте!%20Хочу%20сделать%20заказ." class="floating-wa" target="_blank" title="Написать в WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.005.572 2.07.88 3.175.88 3.18 0 5.767-2.587 5.767-5.766.001-3.182-2.585-5.769-5.766-5.769zm9.969 5.766c0 5.504-4.461 9.965-9.969 9.965-1.744 0-3.376-.463-4.803-1.27l-5.228 1.37 1.396-5.093c-.916-1.474-1.465-3.21-1.465-5.072 0-5.504 4.46-9.965 9.969-9.965 5.508 0 9.969 4.461 9.969 9.965z"/></svg>
+    </a>
+
+</body>
+</html>
